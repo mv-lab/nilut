@@ -1,3 +1,10 @@
+# Custom
+
+*.ipynb
+!nilut-multiblend.ipynb
+
+dataset/*.png
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
