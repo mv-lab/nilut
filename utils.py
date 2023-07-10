@@ -61,14 +61,15 @@ def save_rgb (img, filename):
         
     cv2.imwrite(filename, img)
 
-def plot_all (images, figsize=(20,10), axis='off'):
-    fig = plt.figure(figsize=figsize, dpi=80)
-    nplots = len(images)
-    for i in range(nplots):
-        plt.subplot(1,nplots,i+1)
-        plt.axis(axis)
-        plt.imshow(images[i])
+def plot_all (images, figsize=(20,10), axis='off', title=None):
 
+    nplots = len(images)
+    fig, axs = plt.subplots(1,nplots, figsize=figsize, dpi=80,constrained_layout=True)
+    
+    for i in range(nplots):
+        axs[i].imshow(images[i])
+        axs[i].axis(axis)
+        
     plt.show()
     
 # Metrics

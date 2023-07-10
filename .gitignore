@@ -2,8 +2,11 @@
 
 *.ipynb
 !nilut-multiblend.ipynb
+!nilut.ipynb
 
 dataset/*.png
+fulldata/
+results/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
