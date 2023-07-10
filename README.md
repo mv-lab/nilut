@@ -2,8 +2,6 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2306.11920)
 [<a href="https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="colab demo"></a>](https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing)
-[<a href="https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Kaggle_logo.png?20140912155123" alt="kaggle demo" width=50></a>](https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing)
-
 
 [Marcos V. Conde](https://scholar.google.com/citations?user=NtB1kjYAAAAJ&hl=en), [Javier Vazquez-Corral](https://scholar.google.com/citations?user=gjnuPMoAAAAJ&hl=en), [Michael S. Brown](https://scholar.google.com/citations?hl=en&user=Gv1QGSMAAAAJ), [Radu Timofte](https://scholar.google.com/citations?user=u3MwH5kAAAAJ&hl=en)
 
@@ -30,6 +28,8 @@ In this work, we propose a Neural Implicit LUT (NILUT), an implicitly defined co
 
 **Demo Tutorial** in [nilut-multiblend.ipynb](nilut-multiblend.ipynb) we provide a simple tutorial on how to use NILUT for multi-style image enhancement and blending. You can run it directly on [colab](https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing) in a few minutes. The corresponding training code will be released soon.
 
+**Simple Training** check [nilut.ipynb](nilut.ipynb) to see how to fit professional 3D LUT into a NILUT.
+
 **Dataset** The complete folder `dataset/` includes 100 images from the Adobe MIT 5K Dataset. The images were processed using professional 3D LUTs on Adobe Lightroom. For demo purposes, we include dataset in [releases](https://github.com/mv-lab/nilut/releases/), you can [download it here](https://github.com/mv-lab/nilut/releases/download/v0/dataset.zip). The structure of the dataset is:
 
 ```
@@ -52,16 +52,33 @@ The complete dataset includes 100 images `aaa.png` and their enhanced variants f
 
 ### How do we learn?
 
-We use **Hald** images, a graphical representation of 3D LUT in the form of a color table that contains all of the color gradations of the 3D LUT. Considering the input RGB space Hald, and the resultant one after applying a 3D LUT, we can use such pairs for training our models. You can read the details in our paper Section 4. 
+The complete E2E tutorial example on how to fit a NILUT is at [nilut.ipynb](nilut.ipynb)
 
-> These images are available (together with the 3D LUT file) in our dataset.
+<img src="media/nilut.png" alt="NILUT Fit" width="400"> 
 
-<img src="media/halts.png" alt="NILUT" width="400"> 
+We use **Hald** images, a graphical representation of a 3D LUT in the form of a color table that contains all of the color gradations of the 3D LUT. Considering the input RGB space Hald, and the resultant one after applying a 3D LUT, we can use such pairs for training our models. You can read the details in our paper Section 4. 
+
+For example, we can represent the RGB color space (i.e. all the possible intensities) considering 256^3 = 16.78M points. This set of points can be represented as an image of dimension `4096×4096×3` (below, left). We can sample less points and build the hald image of the RGB space smaller --- see `dataset/halds/Original_Image.png`.
+
+**These images are available (together with the 3D LUT file) in our dataset.**
+
+<img src="media/halts.png" alt="Halt" width="400"> 
 
 You can read more about this here: https://3dlutcreator.com/3d-lut-creator---materials-and-luts.html
 
 <a href="https://www.youtube.com/watch?v=3ZpbUOGDWLE&t"><img src="https://i.imgur.com/X3amc79.png" alt="3D LUT video" width="400"></a>
 
+### Why is this interesting?
+
+- Depending on the complexity of the real 3D LUT and the NILUT architecture, we can perform the fitting in a few minutes! The model emulates with high-precision the behavious of real 3D LUTs.
+
+- NILUTs are by definition differentiable functions, you can plug&play with it, for example to enhance learned ISPs
+
+- NILUTS are very compact in comparison to complete 3D LUTs (even considering sampling and interpolation).
+
+- NILUTs are a novel application of implicit neural representations for color manipulation! In particular the multi-style encoding and implicit blending of styles.
+
+<img src="media/cnilut.png" alt="Halt" width="600"> 
 
 ----
 
