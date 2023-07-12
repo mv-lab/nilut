@@ -2,6 +2,9 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2306.11920)
 [<a href="https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="colab demo"></a>](https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing)
+[![Paper page](https://huggingface.co/datasets/huggingface/badges/raw/main/paper-page-md-dark.svg)](https://huggingface.co/papers/2306.11920)
+[![Tweet](https://img.shields.io/twitter/url/https/github.com/tterb/hyde.svg?style=social)](https://twitter.com/_akhaliq/status/1678804195229433861?s=20)
+
 
 [Marcos V. Conde](https://scholar.google.com/citations?user=NtB1kjYAAAAJ&hl=en), [Javier Vazquez-Corral](https://scholar.google.com/citations?user=gjnuPMoAAAAJ&hl=en), [Michael S. Brown](https://scholar.google.com/citations?hl=en&user=Gv1QGSMAAAAJ), [Radu Timofte](https://scholar.google.com/citations?user=u3MwH5kAAAAJ&hl=en)
 
@@ -54,7 +57,7 @@ The complete dataset includes 100 images `aaa.png` and their enhanced variants f
 
 The complete E2E tutorial example on how to fit a NILUT is at [nilut.ipynb](nilut.ipynb)
 
-<img src="media/nilut.png" alt="NILUT Fit" width="400"> 
+<img src="media/nilut.png" alt="NILUT Fit" width="500"> 
 
 We use **Hald** images, a graphical representation of a 3D LUT in the form of a color table that contains all of the color gradations of the 3D LUT. Considering the input RGB space Hald, and the resultant one after applying a 3D LUT, we can use such pairs for training our models. You can read the details in our paper Section 4. 
 
@@ -79,6 +82,20 @@ You can read more about this here: https://3dlutcreator.com/3d-lut-creator---mat
 - NILUTs are a novel application of implicit neural representations for color manipulation! In particular the multi-style encoding and implicit blending of styles.
 
 <img src="media/cnilut.png" alt="Halt" width="600"> 
+
+
+### Frequent questions
+
+> where is the full dataset? 
+
+We are working on hosting it, should be available by the end of July. If you need it asap please contact us. So far you can download a demo dataset to test out the model fitting and pre-trained models. The 3D LUTs are released under CC 4.0 license. The images are from [Adobe MIT5K dataset](https://data.csail.mit.edu/graphics/fivek/) and therefore keeps the original license.
+
+> how the style interpolation works?
+
+First of all, is a cool feature, we are working on it, and more work in that direction is coming :) 
+The implicit style blending is similar to the interpolation in other implicit neural representations (INRs) -- pixel interpolation in 2D INRs such as SIREN, novel view synthesis in 3D with NeRF. **The more training points, the better the interpolation function is**. In our example [nilut-multiblend.ipynb](nilut-multiblend.ipynb) we provide a CNILUT with encoded 3D LUT styles and trained on the blending basis `[0.33, 0.33, 0.33]` (i.e. equal contribution of each style). To achieve "any" blending, more training points are required to learn the manifold of styles, for example `[0.5, 0.5, 0]` `[0.5, 0, 0.5]` `[0, 0.5, 0.5]` etc.
+Training can take time, but once it is trained, a simple MLP encodes multiple 3D LUTs and can accurately blend them, moreover, since the model is constrained to pixel-wise transformations, no artifacts are introduced.
+
 
 ----
 
