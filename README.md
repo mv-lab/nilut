@@ -2,9 +2,9 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2306.11920)
 [<a href="https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="colab demo"></a>](https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing)
-[![Paper page](https://huggingface.co/datasets/huggingface/badges/raw/main/paper-page-md-dark.svg)](https://huggingface.co/papers/2306.11920)
+[![Dataset](https://img.shields.io/badge/Download%20Dataset-lightyellow)](https://www.kaggle.com/datasets/photolab/nilut-3d-lut-dataset)
 [![Tweet](https://img.shields.io/twitter/url/https/github.com/tterb/hyde.svg?style=social)](https://twitter.com/_akhaliq/status/1678804195229433861?s=20)
-
+[![Paper page](https://huggingface.co/datasets/huggingface/badges/raw/main/paper-page-md-dark.svg)](https://huggingface.co/papers/2306.11920)
 
 [Marcos V. Conde](https://scholar.google.com/citations?user=NtB1kjYAAAAJ&hl=en), [Javier Vazquez-Corral](https://scholar.google.com/citations?user=gjnuPMoAAAAJ&hl=en), [Michael S. Brown](https://scholar.google.com/citations?hl=en&user=Gv1QGSMAAAAJ), [Radu Timofte](https://scholar.google.com/citations?user=u3MwH5kAAAAJ&hl=en)
 
@@ -33,7 +33,7 @@ In this work, we propose a Neural Implicit LUT (NILUT), an implicitly defined co
 
 **Simple Training** check [nilut.ipynb](nilut.ipynb) to see how to fit professional 3D LUT into a NILUT.
 
-**Dataset** The complete folder `dataset/` includes 100 images from the Adobe MIT 5K Dataset. The images were processed using professional 3D LUTs on Adobe Lightroom. For demo purposes, we include dataset in [releases](https://github.com/mv-lab/nilut/releases/), you can [download it here](https://github.com/mv-lab/nilut/releases/download/v0/dataset.zip). The structure of the dataset is:
+**Dataset** Download the complete dataset (13 Gb) from [kaggle here](https://www.kaggle.com/datasets/photolab/nilut-3d-lut-dataset). The complete folder `MIT5K-100-3DLUT/` includes 100 images from the Adobe MIT 5K Dataset. The images were processed using professional 3D LUTs on Adobe Lightroom. For demo purposes, we include a sample dataset in [releases](https://github.com/mv-lab/nilut/releases/), you can [download it here](https://github.com/mv-lab/nilut/releases/download/v0/dataset.zip). The structure of this dataset is:
 
 ```
 dataset/
@@ -50,7 +50,16 @@ dataset/
 ```
 
 where `001.png` is the input unprocessed image, `001_LUTXX.png` is the result of applying each corresponding LUT and `001_blend.png` is the example target for evaluating sytle-blending (in the example the blending is between styles 1,3, and 4 with equal weights 0.33). 
-The complete dataset includes 100 images `aaa.png` and their enhanced variants for each 3D LUT.
+The [complete dataset](https://www.kaggle.com/datasets/photolab/nilut-3d-lut-dataset) includes 100 images (e.g. `001.png`) and their enhanced variants for each 3D LUT (e.g. `001_LUT01.png`).
+
+### Steps to fit a simple 3D LUT
+
+1. Get a 3D LUT as a `.cube` file. We provide a sample 3D LUT in `dataset/cube-files`.
+2. Generate a Hald image. You can check the script `hald.py` and run it with `python hald.py`. You can also [download here](https://3dlutcreator.com/downloads/materials/Hald/HALD_256.png) a simple hald. This will be our input image I.
+3. Load the 3D LUT using the specific software (e.g. Lightroom) and apply it to the hald. This will be our "enahnced" target image I' that reflects the 3D LUT style.
+4. You can now **fit** the 3D LUT transformation using the hald as I and the modified hald as I'.
+
+See below more details and explanations.
 
 
 ### How do we learn?
@@ -63,9 +72,9 @@ We use **Hald** images, a graphical representation of a 3D LUT in the form of a 
 
 For example, we can represent the RGB color space (i.e. all the possible intensities) considering 256^3 = 16.78M points. This set of points can be represented as an image of dimension `4096×4096×3` (below, left). We can sample less points and build the hald image of the RGB space smaller --- see `dataset/halds/Original_Image.png`.
 
-**These images are available (together with the 3D LUT file) in our dataset.**
+**These images are available (together with the 3D LUT file) in our dataset.** [Download here](https://3dlutcreator.com/downloads/materials/Hald/HALD_256.png) a simple hald.
 
-<img src="media/halts.png" alt="Halt" width="400"> 
+<img src="media/hald.png" alt="Hald" width="400"> 
 
 You can read more about this here: https://3dlutcreator.com/3d-lut-creator---materials-and-luts.html
 
@@ -75,20 +84,22 @@ You can read more about this here: https://3dlutcreator.com/3d-lut-creator---mat
 
 - Depending on the complexity of the real 3D LUT and the NILUT architecture, we can perform the fitting in a few minutes! The model emulates with high-precision the behavious of real 3D LUTs.
 
-- NILUTs are by definition differentiable functions, you can plug&play with it, for example to enhance learned ISPs
+- NILUTs are by definition differentiable, you can plug&play with it, for example to enhance learned ISPs
 
 - NILUTS are very compact in comparison to complete 3D LUTs (even considering sampling and interpolation).
 
 - NILUTs are a novel application of implicit neural representations for color manipulation! In particular the multi-style encoding and implicit blending of styles.
 
-<img src="media/cnilut.png" alt="Halt" width="600"> 
+<img src="media/cnilut.png" alt="CNILUT paper" width="600"> 
 
 
 ### Frequent questions
 
 > where is the full dataset? 
 
-We are working on hosting it, should be available by the end of July. If you need it asap please contact us. So far you can download a demo dataset to test out the model fitting and pre-trained models. The 3D LUTs are released under CC 4.0 license. The images are from [Adobe MIT5K dataset](https://data.csail.mit.edu/graphics/fivek/) and therefore keeps the original license.
+We host the dataset on Kaggle, you can [download it here](https://www.kaggle.com/datasets/photolab/nilut-3d-lut-dataset) (13 Gb). The dataset includes 100 images (e.g. `001.png`) and their enhanced variants for each 3D LUT (e.g. `001_LUT01.png`).
+
+You can download a demo dataset to test out the model fitting and pre-trained models. The 3D LUTs (`.cube`) are released under CC 4.0 license. The images are from [Adobe MIT5K dataset](https://data.csail.mit.edu/graphics/fivek/) and therefore keeps the original license.
 
 > how the style interpolation works?
 
