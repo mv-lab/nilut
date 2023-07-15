@@ -1,5 +1,6 @@
 # Custom
 
+*.pt
 *.ipynb
 !nilut-multiblend.ipynb
 !nilut.ipynb

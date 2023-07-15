@@ -20,7 +20,7 @@ def start_timer():
     global start_time
     gc.collect()
     torch.cuda.empty_cache()
-    torch.cuda.reset_max_memory_allocated()
+    torch.cuda.reset_peak_memory_stats()
     torch.cuda.synchronize()
     start_time = time.time()
 
@@ -34,7 +34,7 @@ def end_timer_and_print(local_msg):
 def clean_mem():
     gc.collect()
     torch.cuda.empty_cache()
-    torch.cuda.reset_max_memory_allocated()
+    torch.cuda.reset_peak_memory_stats()
 
 # Model
 

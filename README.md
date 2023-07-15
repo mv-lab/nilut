@@ -2,6 +2,7 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2306.11920)
 [<a href="https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="colab demo"></a>](https://colab.research.google.com/drive/1lvhM-QZd2Lc1B3xohHuwJxicHWCrwdws?usp=sharing)
+[![Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/datasets/photolab/nilut-3d-lut-dataset)
 [![Dataset](https://img.shields.io/badge/Download%20Dataset-lightyellow)](https://www.kaggle.com/datasets/photolab/nilut-3d-lut-dataset)
 [![Tweet](https://img.shields.io/twitter/url/https/github.com/tterb/hyde.svg?style=social)](https://twitter.com/_akhaliq/status/1678804195229433861?s=20)
 [![Paper page](https://huggingface.co/datasets/huggingface/badges/raw/main/paper-page-md-dark.svg)](https://huggingface.co/papers/2306.11920)
@@ -16,14 +17,28 @@
 
 ----
 
-**3D lookup tables (3D LUTs)** are a key component for image enhancement. Modern image signal processors (ISPs) have dedicated support for these as part of the camera rendering pipeline. Cameras typically provide multiple options for picture styles, where each style is usually obtained by applying a unique handcrafted 3D LUT.
+**3D lookup tables (3D LUTs)** are a key component for image enhancement. Modern image signal processors (ISPs) have dedicated support for these as part of the camera rendering pipeline. Cameras typically provide multiple options for picture styles, where each style is usually obtained by applying a handcrafted 3D LUT.
 
-In this work, we propose a Neural Implicit LUT (NILUT), an implicitly defined continuous 3D color transformation parameterized by a neural network. We show that NILUTs are capable of accurately emulating real 3D LUTs. Moreover, a NILUT can be extended to incorporate multiple styles into a single network with the ability to blend styles implicitly. Our novel approach is **memory-efficient, controllable** and can complement previous methods, including **learned ISPs**.
+We propose a **Neural Implicit LUT (NILUT)**, an implicitly defined continuous 3D color transformation parameterized by a neural network. We show that NILUTs are capable of accurately emulating real 3D LUTs. Moreover, a NILUT can be extended to incorporate multiple styles into a single network with the ability to blend styles implicitly. Our approach is **memory-efficient, controllable** and can complement previous methods, including **learned ISPs**.
 
 
 ✏️ **Topics** Image Enhancement, Image Editing, Color Manipulation, Tone Mapping, Presets
 
 ⚠️ ***Website and repo in progress.*** **See also [AISP](https://github.com/mv-lab/AISP)** for image signal processing code and papers.
+
+----
+
+### Steps to fit a simple 3D LUT
+
+1. Get a 3D LUT as a `.cube` file. We provide a sample 3D LUT in `dataset/cube-files`.
+2. Generate a Hald image. You can check the script `hald.py` and run it with `python hald.py`. You can also [download here](https://3dlutcreator.com/downloads/materials/Hald/HALD_256.png) a simple hald. This will be our input image I.
+3. Load the 3D LUT using the specific software (e.g. Lightroom) and apply it to the hald. This will be our "enahnced" target image I' that reflects the 3D LUT style.
+4. You can now [fit.py](fit.py) the 3D LUT transformation using the hald as I and the modified hald as I'.
+
+```
+python fit.py --in dataset/halds/Original_Image.png --target dataset/halds/LUT01_ContrastLUT.png --steps 1000 --units 128 --layers 2
+```
+In **less than 30s** you have it! Now your complex 3D LUT is just `3dlut.pt`, is compact and differentiable, ready to use and plug&play in image processing/enhancement pipelines. **You can run this instantly after forking this repo.** See below more details and explanations.
 
 ----
 
@@ -51,15 +66,6 @@ dataset/
 
 where `001.png` is the input unprocessed image, `001_LUTXX.png` is the result of applying each corresponding LUT and `001_blend.png` is the example target for evaluating sytle-blending (in the example the blending is between styles 1,3, and 4 with equal weights 0.33). 
 The [complete dataset](https://www.kaggle.com/datasets/photolab/nilut-3d-lut-dataset) includes 100 images (e.g. `001.png`) and their enhanced variants for each 3D LUT (e.g. `001_LUT01.png`).
-
-### Steps to fit a simple 3D LUT
-
-1. Get a 3D LUT as a `.cube` file. We provide a sample 3D LUT in `dataset/cube-files`.
-2. Generate a Hald image. You can check the script `hald.py` and run it with `python hald.py`. You can also [download here](https://3dlutcreator.com/downloads/materials/Hald/HALD_256.png) a simple hald. This will be our input image I.
-3. Load the 3D LUT using the specific software (e.g. Lightroom) and apply it to the hald. This will be our "enahnced" target image I' that reflects the 3D LUT style.
-4. You can now **fit** the 3D LUT transformation using the hald as I and the modified hald as I'.
-
-See below more details and explanations.
 
 
 ### How do we learn?
