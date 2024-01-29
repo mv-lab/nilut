@@ -1,5 +1,5 @@
-# AAAI 2024 [NILUT: Conditional Neural Implicit 3D Lookup Tables for Image Enhancement](https://arxiv.org/abs/2306.11920)
-
+# NILUT @ AAAI 2024
+## [NILUT: Conditional Neural Implicit 3D Lookup Tables for Image Enhancement](https://arxiv.org/abs/2306.11920)
 ### The 38th Annual AAAI Conference on Artificial Intelligence (AAAI), 2024, Vancouver
 
 [![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2306.11920)
@@ -121,11 +121,11 @@ Training can take time, but once it is trained, a simple MLP encodes multiple 3D
 Hope you like it 🤗 If you find this interesting/insightful/inspirational or you use it, do not forget to acknowledge our work:
 
 ```
-@article{conde2023nilut,
+@inproceedings{conde2024nilut,
   title={NILUT: Conditional Neural Implicit 3D Lookup Tables for Image Enhancement},
   author={Conde, Marcos V and Vazquez-Corral, Javier and Brown, Michael S and Timofte, Radu},
-  journal={arXiv preprint arXiv:2306.11920},
-  year={2023}
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  year={2024}
 }
 ```
 
